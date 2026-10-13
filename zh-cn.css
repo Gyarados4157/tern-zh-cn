@@ -1,0 +1,26 @@
+/* 中文汉化插件样式
+ * 原理：隐藏原英文文本（font-size: 0），用 ::before 注入中文。
+ * 只覆盖有稳定选择器的静态文字；动态文本（toast、错误消息等）无法翻译。
+ * 选择器基于 Tern 0.8.x 的内部 class，升级后可能需要调整。
+ */
+
+/* ── 命令面板作用域页签 ──
+ * DOM 顺序（0.8.3 实测）：1 All, 2 Commands, 3 Files, 4-5 上下文隐藏,
+ * 6 Sessions, 7 Hosts。nth-of-type 按 button 同标签计数，含隐藏项。
+ * white-space: nowrap 防止两个汉字被折行。 */
+.tn-pl-scopes .tn-pl-scope:nth-of-type(1) { font-size: 0; }
+.tn-pl-scopes .tn-pl-scope:nth-of-type(1)::before { content: "全部"; font-size: 12px; display: inline-block; width: 26px; text-align: center; }
+.tn-pl-scopes .tn-pl-scope:nth-of-type(2) { font-size: 0; }
+.tn-pl-scopes .tn-pl-scope:nth-of-type(2)::before { content: "命令"; font-size: 12px; display: inline-block; width: 26px; text-align: center; }
+.tn-pl-scopes .tn-pl-scope:nth-of-type(3) { font-size: 0; }
+.tn-pl-scopes .tn-pl-scope:nth-of-type(3)::before { content: "文件"; font-size: 12px; display: inline-block; width: 26px; text-align: center; }
+.tn-pl-scopes .tn-pl-scope:nth-of-type(6) { font-size: 0; }
+.tn-pl-scopes .tn-pl-scope:nth-of-type(6)::before { content: "会话"; font-size: 12px; display: inline-block; width: 26px; text-align: center; }
+.tn-pl-scopes .tn-pl-scope:nth-of-type(7) { font-size: 0; }
+.tn-pl-scopes .tn-pl-scope:nth-of-type(7)::before { content: "主机"; font-size: 12px; display: inline-block; width: 26px; text-align: center; }
+
+/* ── 标签栏按钮文字（宽松布局/大尺寸窗口下显示标签时生效） ── */
+button.tb-add > span.lbl { font-size: 0; }
+button.tb-add > span.lbl::before { content: "新建标签页"; font-size: 13px; display: inline-block; width: 66px; }
+button.tb-files > span.lbl { font-size: 0; }
+button.tb-files > span.lbl::before { content: "文件"; font-size: 13px; display: inline-block; width: 28px; }
