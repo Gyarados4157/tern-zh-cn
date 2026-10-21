@@ -36,6 +36,7 @@ local function apply(cx, key, value)
 	local ok, result = pcall(function() return cx.settings:set(key, value) end)
 	if ok then
 		cx:toast("info", "已保存：" .. locale.settings[key].label, "实际值：" .. display(result))
+		if M.on_saved then M.on_saved(cx) end
 	else
 		report(cx, "设置未保存，原值保持不变", result)
 	end
@@ -154,5 +155,8 @@ function M.register()
 			run = function(cx) M.open(cx, group.id) end })
 	end
 end
+
+M.apply = apply
+M.edit = edit
 
 return M

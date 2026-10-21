@@ -93,4 +93,6 @@ for _, c in ipairs(commands) do
 	})
 end
 
-require("./settings").register()
+local settings = require("./settings")
+settings.register()
+require("./page").register(settings)

@@ -1,0 +1,25 @@
+.zhp-root { display: flex; gap: 28px; font-family: Geist, system-ui, sans-serif; font-size: 13px; line-height: 1.6; width: 100%; padding: 24px; align-items: flex-start; }
+.zhp-nav { display: flex; flex-direction: column; gap: 4px; width: 148px; flex-shrink: 0; position: sticky; top: 16px; }
+.zhp-brand { font-size: 18px; margin: 0 0 16px; }
+.zhp-content { flex: 1; min-width: 0; max-width: 880px; }
+.zhp-title { font-size: 26px; margin: 0 0 6px; }
+.zhp-lead { color: var(--t3); margin: 0 0 20px; }
+.zhp-toolbar, .zhp-controls { display: flex; flex-wrap: wrap; gap: 10px; }
+.zhp-toolbar { margin-bottom: 24px; }
+.zhp-root .zhp-button { padding: 7px 12px; border: 1px solid var(--l3); border-radius: 7px; background: var(--raise); color: var(--t1); text-align: left; cursor: pointer; }
+.zhp-button:hover { border-color: var(--accent); }
+.zhp-button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.zhp-button.selected { color: var(--accent); border-color: var(--accent); }
+.zhp-nav .zhp-button { border-color: transparent; background: transparent; }
+.zhp-nav .zhp-button.selected { border-color: var(--accent); }
+.zhp-setting { padding: 20px 0; border-top: 1px solid var(--l2); }
+.zhp-label { font-size: 15px; font-weight: 600; margin: 0 0 6px; }
+.zhp-description { margin: 0 0 8px; white-space: normal; overflow-wrap: anywhere; }
+.zhp-key { color: var(--t3); font-size: 11px; overflow-wrap: anywhere; }
+.zhp-value { margin: 12px 0; white-space: pre-wrap; overflow-wrap: anywhere; }
+@media (max-width: 680px) {
+ .zhp-root { flex-direction: column; padding: 16px; gap: 20px; }
+ .zhp-nav { position: static; width: 100%; flex-direction: row; flex-wrap: wrap; }
+ .zhp-brand { width: 100%; margin-bottom: 8px; }
+ .zhp-content { width: 100%; }
+}
