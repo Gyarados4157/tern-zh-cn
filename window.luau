@@ -92,3 +92,5 @@ for _, c in ipairs(commands) do
 		end,
 	})
 end
+
+require("./settings").register()

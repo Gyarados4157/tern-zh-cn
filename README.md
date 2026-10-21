@@ -1,42 +1,68 @@
 # tern-zh-cn
 
-Tern 终端的简体中文汉化插件。
+[Tern](https://stencil.so/tern) 简体中文插件，基于 [maicent/tern-zh-cn](https://github.com/maicent/tern-zh-cn) 的 fork。0.2.0 新增 **可搜索、可修改真实设置的中文入口**，适配 Tern 0.9.5。
 
-[Tern](https://stencil.so/tern) 是 Stencil 的 Rust 原生终端，目前官方没有 i18n 框架。本插件用官方插件机制做"半汉化"：
+## 安装 / 从原版升级
 
-- **中文命令面板**：以中文标题注册 50+ 个常用内置命令的包装，在命令面板（`Ctrl+Shift+P`）里直接打中文搜索，如"新建标签页""向右拆分""设置"。
-- **静态文字替换**：用全局 CSS 把命令面板作用域页签（全部/命令/文件/会话/主机）和标签栏按钮文字换成中文。
+```sh
+tern plugin install github.com/Gyarados4157/tern-zh-cn --force
+```
+
+也可以在 Settings › Plugins 安装该 GitHub 地址。插件 ID 沿用 `zh-cn`，替换原版而不是同时运行两份；`--force` 会覆盖已安装的同 ID 插件副本，不改变 Tern 设置。若原来使用 `plugin link`，先取消原来的链接再安装。更新后在命令面板执行 Reload plugins（重新加载插件），必要时重开窗口。
+
+## 中文设置
+
+1. 按 macOS **⇧⌘P**（其他平台 Ctrl+Shift+P）打开命令面板。
+2. 搜索 **中文设置**，选择“中文设置：搜索全部设置…”；也可以直接选择通用、外观、终端、数据库等分类。
+3. 输入中文功能、中文说明或原始英文设置键搜索。每项显示当前值。
+4. 进入项目选择“修改设置”或“恢复默认值”；说明被列表截断时，选择“阅读完整中文说明”在 Markdown 笔记中阅读全文。
+5. 开关和枚举以中文选项选择；数字、文字和复杂 JSON 在输入后需要确认。Esc 取消，不写设置。恢复默认值也会先确认。
+
+修改通过 `cx.settings:set` 的正常校验、应用和保存路径，不直接改写 settings.json。重启后生效的选项仍需重启；本机与远程设置的作用范围沿用 Tern 自身行为。终端历史行数等设置会立即影响运行状态，修改前请看说明。
+
+### 输入规则
+
+- **开关 / 枚举**：选择列表中的值；原始枚举值作为辅助文字保留，避免歧义。
+- **整数 / 数字**：输入 JSON 数字，整数项拒绝小数；具体有效范围由 Tern 校验并可能钳制，保存通知显示实际值。
+- **字符串**：直接输入文字，不加 JSON 双引号；清空保存为空字符串，不等于恢复默认。
+- **数组 / 对象 / 混合类型**：输入合法 JSON，字符串需要双引号。格式、字段与类型由 Tern 再次校验。不熟悉复杂结构时建议使用原生设置编辑器。
+- **可空设置**：枚举中提供“自动 / 未设置”，复杂输入可用 `null` 清除。恢复默认值使用运行时给出的默认值，不在插件里复制一套默认配置。
+
+中文名称与解释位于 `locales/zh-cn.luau`；实际键、类型、枚举、范围与默认值由当前运行的 Tern API 提供。未进入词典的新版本设置不会冒充已经翻译。
+
+0.2.0 词典覆盖 Tern 0.9.5 的全部 297 个设置叶键、16 个分类。已在独立配置的真实 macOS Tern 窗口验证：中文搜索、分类入口、开关关闭/开启、枚举写入、整数保存与小数拒绝、取消修改、恢复默认值及取消恢复、字符串保存、可空数字、无效 JSON 不修改原值、完整中文说明阅读。
+
+## 保留的汉化功能
+
+- 中文常用命令包装：搜索“新建标签页”“向右拆分”“设置”等。
+- CSS 静态替换：命令面板分类（全部、命令、文件、会话、主机）和部分标签栏文字。
 
 ![命令面板中的中文命令与作用域页签](docs/screenshot.png)
 
-## 安装
+## 能力边界
 
-```sh
-tern plugin install github.com/maicent/tern-zh-cn
-```
+**这不是 Tern 原生 i18n 语言包，不会把内置 Settings 页面变成中文。** Tern 0.9.5 的插件接口没有内置字符串翻译钩子；其设置页标签也没有足够稳定的设置键属性。按行号覆盖会在搜索、条件变化或升级后把解释贴到错误设置，因此不采用。
 
-或在 Tern 的 Preferences › Plugins 里填同样的 GitHub 地址。
+- 中文入口由插件提供，原生英文设置页仍可使用。
+- 原生设置搜索仍按英文；中文搜索在新增入口内进行。
+- 不修改内置英文命令、不翻译程序输出、系统菜单、原生对话框、工具提示或错误详情。
+- JSON 中的键、模型名、路径、主题 ID、快捷键字符串等技术标识不翻译。
+- 中文入口使用原生搜索选择器与输入框，不是复刻整套 Settings 页面。英文界面保留，两个入口操作同一份设置。
+- 既有 CSS 替换基于 Tern 内部 class，跨版本仍可能失效；中文设置入口不依赖这些选择器。
 
-## 不能翻译的部分（原理限制）
+## 开发
 
-- 内置命令的英文原行无法改名或隐藏（palette 行没有可选择器属性），但中文行排在同一列表里，搜索中文即可。
-- 动态文本（toast 通知、错误消息、对话框内容、帮助文本）是运行时生成的字符串，插件没有文本拦截钩子。
-- 工具提示（tooltip）文字来自 HTML `title` 属性，CSS 改不了。
+- `window.luau`：原有中文命令包装与中文设置命令注册。
+- `settings.luau`：搜索、查看、编辑、确认与恢复默认值。
+- `locales/zh-cn.luau`：分组、中文说明与枚举翻译词典。
+- `zh-cn.css`：原有静态界面文字替换。
 
-## 实现方式
+修改词典不必改编辑器逻辑。添加词条使用真实的 dotted key，并核对 `cx.settings:describe(key)`。不要以中文标签代替真实设置键，也不要翻译用户配置值。测试需使用隔离配置目录和独立 daemon socket，避免改变日常会话；`tern serve` 不自动加载本地插件，完整插件验证用 `tern --control` 窗口。
 
-- `window.luau`：`tern.command` 注册中文包装命令，`run` 里调用对应内置命令（`cx:command(...)`），不改行为。
-- `zh-cn.css`：`font-size: 0` 隐藏原文 + `::before { content: "中文" }` 注入翻译。Tern 的 CSS 引擎支持 `content` 与伪元素，详见 [Supported CSS](https://docs.stencil.so/tern/styles/css.html)。
+接口依据：[Settings API](https://docs.stencil.so/tern/reference/api-window.html)、[SDK 类型与运行时](https://docs.stencil.so/tern/reference/api.html)、[插件调试](https://docs.stencil.so/tern/guides/debugging.html)。
 
-## 维护说明
-
-选择器基于 Tern 0.8.x 的内部 class（`tn-*`），升级 Tern 后若界面文字"复活"，需要对照新版本的 DOM 调整 `zh-cn.css`。排查工具：
-
-```sh
-tern serve --control /tmp/tern.sock   # headless 窗口
-tern ctl --control /tmp/tern.sock tree    #  dump DOM
-```
+发布前使用 Python 3.11+ 运行 `python3 scripts/check-package.py`，递归检查入口引用的本地模块及样式文件是否完整。GitHub Actions 自动执行同一检查，防止遗漏词典等运行时文件。此检查不代替真实 Tern 窗口的交互验证。
 
 ## License
 
-MIT
+MIT。保留原作者版权，见 LICENSE。
